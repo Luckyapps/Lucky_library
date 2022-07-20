@@ -1,3 +1,5 @@
+console.warn("[LUCKY_LIBRARY] Loaded");
+
 function element_add(wert, element, mode){ //Etwas (z.B. Text) zu einem html element hinzufügen
     if(element){
       if(mode){
