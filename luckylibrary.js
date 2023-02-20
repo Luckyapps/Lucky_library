@@ -69,10 +69,47 @@ async function scriptLoader(path, callback){ //Ein JS script einbetten
   }
 }
 
-function cssLoader(file){ //Ein CSS stylesheet einbetten
+function cssLoader(file, callback){ //Ein CSS stylesheet einbetten || Callback: Eine Funktion ausführen, wenn sheet geladen ist
     var link = document.createElement("link");
     link.href = file;
     link.type = "text/css";
     link.rel = "stylesheet";
     document.getElementsByTagName("head")[0].appendChild(link);
+    link.onload = function(){
+      if(typeof(callback) == "function"){
+          callback();
+      }
+  }
+}
+
+
+async function fetch_data(url, type){ //Daten einer API abrufen --> Muss mit await aufgerufen werden
+  var data;
+
+  url = await http_fix(url);
+  
+  await fetch(url)
+  
+  .then((response) => response.text())
+
+  .then((data_text) => {
+    if(type == "JSON"){
+      data = JSON.parse(data_text)
+    }else{
+      data = data_text;
+    }
+  });
+
+  return data;
+}
+
+function http_fix(url){
+  if(!url.includes("https")){
+      if(url.includes("http")){
+          url = url.replace("http","https");
+          return url;
+      }
+  }else{
+      return url;
+  }
 }
